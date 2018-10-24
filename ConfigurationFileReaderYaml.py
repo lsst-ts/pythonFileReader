@@ -31,7 +31,7 @@ class FileReaderYaml(cfr.FileReader):
 
 
 if __name__ == "__main__":
-    fileYaml = FileReaderYaml("..\\settingFiles", "Test", 1)
+    fileYaml = FileReaderYaml("settingFiles", "Test", 1)
     fileYaml.loadFile("example")
     print(fileYaml.readStringValue('baudrate'))
     print(fileYaml.getAllAttributes())
