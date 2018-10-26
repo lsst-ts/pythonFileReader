@@ -1,5 +1,5 @@
 import unittest
-import ConfigurationFileReaderYaml as ryaml
+import pythonFileReader.ConfigurationFileReaderYaml as ryaml
 
 class TestConfigurationReader(unittest.TestCase):
 

@@ -1,4 +1,4 @@
-import ConfigurationFileReader as cfr
+import pythonFileReader.ConfigurationFileReader as cfr
 import yaml
 
 class FileReaderYaml(cfr.FileReader):
@@ -8,7 +8,7 @@ class FileReaderYaml(cfr.FileReader):
         self.settingsSet = settingsSet
         self.settingsVersion = str(settingsVersion)
         self.yamlfile = None
-        self.separator = "\\"
+        self.separator = "/"
 
     def getPath(self, settings):
         return self.path+self.separator+self.settingsSet+self.separator+self.settingsVersion+self.separator+settings+".yaml"
