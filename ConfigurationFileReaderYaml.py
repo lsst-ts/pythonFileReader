@@ -1,4 +1,4 @@
-import ConfigurationFileReader as cfr
+import pythonFileReader.ConfigurationFileReader as cfr
 import yaml
 
 class FileReaderYaml(cfr.FileReader):
@@ -8,7 +8,7 @@ class FileReaderYaml(cfr.FileReader):
         self.settingsSet = settingsSet
         self.settingsVersion = str(settingsVersion)
         self.yamlfile = None
-        self.separator = "\\"
+        self.separator = "/"
         self.mainSettingsFileName = mainSettingsFileName
 
     def getPath(self, settings):
@@ -71,9 +71,9 @@ class FileReaderYaml(cfr.FileReader):
         yamldata.close()
         return value
 
-if __name__ == "__main__":
-    fileYaml = FileReaderYaml("C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\settingFiles", "Test", 1)
+#if __name__ == "__main__":
+    #fileYaml = FileReaderYaml("C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\settingFiles", "Test", 1)
     #fileYaml.loadFile("example")
-    fileYaml.setSettingsFromLabel("Default13")
+    #fileYaml.setSettingsFromLabel("Default13")
 #    print(fileYaml.readStringValue('baudrate'))
 #    print(fileYaml.getAllAttributes())
