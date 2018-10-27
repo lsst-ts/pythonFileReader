@@ -49,14 +49,19 @@ class FileReaderYaml(cfr.FileReader):
         return ",".join(recommendedSettings)
 
     def setSettingsFromLabel(self, settingsToApply):
-        fileReader = FileReaderYaml(self.path, "", "")
-        yamldata = open(fileReader.getPath(self.mainSettingsFileName), "r")
-        mainSettings = yaml.safe_load(yamldata)
-        recommendedSettings = self.readValue('aliases', mainSettings)
-        if(settingsToApply not in recommendedSettings.keys()): raise ValueError(f"Value=\"{settingsToApply}\" doesn't exist for recommended settings")
-        self.settingsSet = recommendedSettings[settingsToApply]['settingSet']
-        self.settingsVersion = recommendedSettings[settingsToApply]['settingVersion']
-        yamldata.close()
+        if(settingsToApply.__contains__(";")):
+            settingsValues = settingsToApply.split(";",2)
+            self.settingsSet = settingsValues[0]
+            self.settingsVersion = int(settingsValues[1])
+        else:
+            fileReader = FileReaderYaml(self.path, "", "")
+            yamldata = open(fileReader.getPath(self.mainSettingsFileName), "r")
+            mainSettings = yaml.safe_load(yamldata)
+            recommendedSettings = self.readValue('aliases', mainSettings)
+            if(settingsToApply not in recommendedSettings.keys()): raise ValueError(f"Value=\"{settingsToApply}\" doesn't exist for recommended settings")
+            self.settingsSet = recommendedSettings[settingsToApply]['settingSet']
+            self.settingsVersion = recommendedSettings[settingsToApply]['settingVersion']
+            yamldata.close()
 
     def getValueFromMainSettings(self, key):
         fileReader = FileReaderYaml(self.path, "", "")
