@@ -3,21 +3,31 @@ import yaml
 
 class FileReaderYaml(cfr.FileReader):
 
-    def __init__(self, path, settingsSet, settingsVersion):
+    def __init__(self, path, settingsSet, settingsVersion, mainSettingsFileName="mainSetup"):
         self.path = path
         self.settingsSet = settingsSet
         self.settingsVersion = str(settingsVersion)
         self.yamlfile = None
         self.separator = "\\"
+        self.mainSettingsFileName = mainSettingsFileName
 
     def getPath(self, settings):
-        return self.path+self.separator+self.settingsSet+self.separator+self.settingsVersion+self.separator+settings+".yaml"
+        path = self.path
+        if(self.settingsSet != ""):
+            path += self.separator+self.settingsSet
+        if(self.settingsVersion != ""):
+            path += self.separator+self.settingsVersion
+        path += self.separator+settings+".yaml"
+        return path
 
     def getAllAttributes(self):
         return self.yamlfile.keys()
 
-    def readValue(self, attribute):
-        return self.yamlfile[attribute]
+    def readValue(self, attribute, yamlfile=None ):
+        if(yamlfile is None):
+            return self.yamlfile[attribute]
+        else:
+            return yamlfile[attribute]
 
     def loadFile(self, settings):
         fileReader = FileReaderYaml(self.path, self.settingsSet, self.settingsVersion)
@@ -29,9 +39,29 @@ class FileReaderYaml(cfr.FileReader):
         self.settingsSet = settingsSet
         self.settingsVersion = str(settingsVersion)
 
+    def getRecommendedSettings(self):
+        #Recommended settings come from the path + filename
+        fileReader = FileReaderYaml(self.path, "", "")
+        yamldata = open(fileReader.getPath(self.mainSettingsFileName), "r")
+        mainSettings = yaml.safe_load(yamldata)
+        recommendedSettings = self.readValue('recommendedSettings', mainSettings)
+        yamldata.close()
+        return ",".join(recommendedSettings)
+
+    def setSettingsFromLabel(self, settingsToApply):
+        fileReader = FileReaderYaml(self.path, "", "")
+        yamldata = open(fileReader.getPath(self.mainSettingsFileName), "r")
+        mainSettings = yaml.safe_load(yamldata)
+        recommendedSettings = self.readValue('aliases', mainSettings)
+        if(settingsToApply not in recommendedSettings.keys()): raise ValueError(f"Value=\"{settingsToApply}\" doesn't exist for recommended settings")
+        self.settingsSet = recommendedSettings[settingsToApply]['settingSet']
+        self.settingsVersion = recommendedSettings[settingsToApply]['settingVersion']
+        yamldata.close()
+
 
 if __name__ == "__main__":
-    fileYaml = FileReaderYaml("settingFiles", "Test", 1)
-    fileYaml.loadFile("example")
-    print(fileYaml.readStringValue('baudrate'))
-    print(fileYaml.getAllAttributes())
+    fileYaml = FileReaderYaml("C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\settingFiles", "Test", 1)
+    #fileYaml.loadFile("example")
+    fileYaml.setSettingsFromLabel("Default13")
+#    print(fileYaml.readStringValue('baudrate'))
+#    print(fileYaml.getAllAttributes())
