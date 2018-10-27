@@ -58,3 +58,11 @@ class TestConfigurationReader(unittest.TestCase):
     def test_setSettingsFromLabelSettingsVersion(self):
         self.fileYaml.setSettingsFromLabel('Default1')
         self.assertEqual(self.fileYaml.settingsVersion,1)
+
+    def test_getValueFromMainSettings1(self):
+        value = self.fileYaml.getValueFromMainSettings('salId')
+        self.assertEqual(value, 1)
+
+    def test_getValueFromMainSettings2(self):
+        value = self.fileYaml.getValueFromMainSettings('filePath')
+        self.assertEqual(value, "C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\fitsFiles")

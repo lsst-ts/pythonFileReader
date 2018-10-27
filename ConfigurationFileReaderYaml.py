@@ -58,6 +58,13 @@ class FileReaderYaml(cfr.FileReader):
         self.settingsVersion = recommendedSettings[settingsToApply]['settingVersion']
         yamldata.close()
 
+    def getValueFromMainSettings(self, key):
+        fileReader = FileReaderYaml(self.path, "", "")
+        yamldata = open(fileReader.getPath(self.mainSettingsFileName), "r")
+        mainSettings = yaml.safe_load(yamldata)
+        value = self.readValue(key, mainSettings)
+        yamldata.close()
+        return value
 
 if __name__ == "__main__":
     fileYaml = FileReaderYaml("C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\settingFiles", "Test", 1)

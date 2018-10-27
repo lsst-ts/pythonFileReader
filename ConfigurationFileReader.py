@@ -30,3 +30,7 @@ class FileReader(ABC):
     @abstractmethod
     def setSettingsFromLabel(self, settingsToApply):
         pass
+
+    @abstractmethod
+    def getValueFromMainSettings(self, key):
+        pass
