@@ -6,7 +6,6 @@ class FileReader(ABC):
         self.path = ""
         self.settingsSet = ""
         self.settingsVersion = ""
-        self.path = ""
 
     @abstractmethod
     def getAllAttributes(self):
@@ -22,4 +21,16 @@ class FileReader(ABC):
 
     @abstractmethod
     def setSettingsSet(self):
+        pass
+
+    @abstractmethod
+    def getRecommendedSettings(self):
+        pass
+
+    @abstractmethod
+    def setSettingsFromLabel(self, settingsToApply):
+        pass
+
+    @abstractmethod
+    def getValueFromMainSettings(self, key):
         pass
