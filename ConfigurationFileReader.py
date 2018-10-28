@@ -6,17 +6,19 @@ class FileReader(ABC):
         self.path = ""
         self.settingsSet = ""
         self.settingsVersion = ""
+        self.settingsFileName = settingsFileName
+        self.separator = "/"
 
     @abstractmethod
     def getAllAttributes(self):
         pass
 
     @abstractmethod
-    def readValue(self, attribute):
+    def loadFile(self):
         pass
 
     @abstractmethod
-    def loadFile(self):
+    def readValue(self, attribute, yamlfile=None ):
         pass
 
     @abstractmethod
@@ -28,9 +30,5 @@ class FileReader(ABC):
         pass
 
     @abstractmethod
-    def setSettingsFromLabel(self, settingsToApply):
-        pass
-
-    @abstractmethod
-    def getValueFromMainSettings(self, key):
+    def setSettingsFromLabel(self, settingsToApply, mainConfigurationFile):
         pass

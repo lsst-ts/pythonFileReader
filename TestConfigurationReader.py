@@ -1,11 +1,15 @@
 import unittest
 import pythonFileReader.ConfigurationFileReaderYaml as ryaml
+import os
 
 class TestConfigurationReader(unittest.TestCase):
 
     def setUp(self):
-        self.fileYaml = ryaml.FileReaderYaml("C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\settingFiles", "Test", 1)
+        self.fileYaml = ryaml.FileReaderYaml("../settingFiles", "Test", 1)
         self.fileYaml.loadFile("serialConfiguration")
+
+        self.fileYamlMain = ryaml.FileReaderYaml("../settingFiles", "", "")
+        self.fileYamlMain.loadFile("mainSetup")
 
     def test_baudrate(self):
         baudrate = self.fileYaml.readValue('baudrate')
@@ -48,32 +52,35 @@ class TestConfigurationReader(unittest.TestCase):
         self.assertEqual("\n", termChar)
 
     def test_getRecommendedSettings(self):
-        recommendedSettings = self.fileYaml.getRecommendedSettings()
+        recommendedSettings = self.fileYamlMain.getRecommendedSettings()
         self.assertEqual("Default1,Default2", recommendedSettings)
 
     def test_setSettingsFromLabelSettingSet(self):
-        self.fileYaml.setSettingsFromLabel('Default1')
-        self.assertEqual(self.fileYaml.settingsSet, "Test1")
+        self.fileYaml.setSettingsFromLabel('Default1', self.fileYamlMain)
+        self.assertEqual(self.fileYaml.settingsSet, "Test")
 
     def test_setSettingsFromLabelSettingsVersion(self):
-        self.fileYaml.setSettingsFromLabel('Default1')
+        self.fileYaml.setSettingsFromLabel('Default1', self.fileYamlMain)
         self.assertEqual(self.fileYaml.settingsVersion,1)
 
     def test_getValueFromMainSettings1(self):
-        value = self.fileYaml.getValueFromMainSettings('salId')
+        value = self.fileYamlMain.readValue('salId')
         self.assertEqual(value, 1)
 
     def test_getValueFromMainSettings2(self):
-        value = self.fileYaml.getValueFromMainSettings('filePath')
-        self.assertEqual(value, "C:\\Users\\aanania\\PycharmProjects\\ts_electrometer3\\fitsFiles")
+        value = self.fileYamlMain.readValue('filePath')
+        path = os.path.dirname(__file__)
+        path = os.path.dirname(path)
+        path = path+"/electrometerFitsFiles"
+        self.assertEqual(value, path)
 
     def test_setSettingsFromLabelSettingsVersion2(self):
         #Test from direct definition of which settings to use (e.g. Test;1)
-        self.fileYaml.setSettingsFromLabel('Test;1')
+        self.fileYaml.setSettingsFromLabel('Test;1', self.fileYamlMain)
         self.assertEqual(self.fileYaml.settingsVersion,1)
 
     def test_setSettingsFromLabelSettingsVersion3(self):
         #Test from direct definition of which settings to use (e.g. Test;1)
-        self.fileYaml.setSettingsFromLabel('Test;2')
+        self.fileYaml.setSettingsFromLabel('Test;2', self.fileYamlMain)
         self.assertEqual(self.fileYaml.settingsVersion,2)
 
