@@ -1,0 +1,13 @@
+recommendedSettings: 
+    - "Default1"
+    - "Default2"
+aliases:
+    Default1:
+        settingSet: "test"
+        settingVersion: 1
+    Default2:
+        settingSet: "test"
+        settingVersion: 2
+salId: 1
+filePath: "/home/saluser/ts_electrometer2/electrometerFitsFiles"
+simulated: 1

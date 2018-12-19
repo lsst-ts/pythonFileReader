@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
+
 class FileReader(ABC):
 
-    def __init__(self):
+    def __init__(self, settingsFileName=""):
         self.path = ""
         self.settingsSet = ""
         self.settingsVersion = ""
@@ -18,7 +19,7 @@ class FileReader(ABC):
         pass
 
     @abstractmethod
-    def readValue(self, attribute, yamlfile=None ):
+    def readValue(self, attribute, yamlfile=None):
         pass
 
     @abstractmethod

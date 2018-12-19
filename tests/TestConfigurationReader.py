@@ -1,14 +1,15 @@
 import unittest
-import pythonFileReader.ConfigurationFileReaderYaml as ryaml
+import lsst.ts.pythonFileReader.ConfigurationFileReaderYaml as ryaml
 import os
+
 
 class TestConfigurationReader(unittest.TestCase):
 
     def setUp(self):
-        self.fileYaml = ryaml.FileReaderYaml("../settingFiles", "Test", 1)
-        self.fileYaml.loadFile("serialConfiguration")
+        self.fileYaml = ryaml.FileReaderYaml("./settingFiles", "test", 1)
+        self.fileYaml.loadFile("example")
 
-        self.fileYamlMain = ryaml.FileReaderYaml("../settingFiles", "", "")
+        self.fileYamlMain = ryaml.FileReaderYaml("./settingFiles", "", "")
         self.fileYamlMain.loadFile("mainSetup")
 
     def test_baudrate(self):
@@ -25,11 +26,11 @@ class TestConfigurationReader(unittest.TestCase):
 
     def test_stopBits(self):
         stopBits = self.fileYaml.readValue('stopBits')
-        self.assertEqual(1, stopBits)
+        self.assertEqual(10, stopBits)
 
     def test_byteSize(self):
         byteSize = self.fileYaml.readValue('byteSize')
-        self.assertEqual(7, byteSize)
+        self.assertEqual(8, byteSize)
 
     def test_byteToRead(self):
         byteToRead = self.fileYaml.readValue('byteToRead')
@@ -49,7 +50,7 @@ class TestConfigurationReader(unittest.TestCase):
 
     def test_termChar(self):
         termChar = self.fileYaml.readValue('termChar')
-        self.assertEqual("\n", termChar)
+        self.assertEqual("endl", termChar)
 
     def test_getRecommendedSettings(self):
         recommendedSettings = self.fileYamlMain.getRecommendedSettings()
@@ -57,11 +58,11 @@ class TestConfigurationReader(unittest.TestCase):
 
     def test_setSettingsFromLabelSettingSet(self):
         self.fileYaml.setSettingsFromLabel('Default1', self.fileYamlMain)
-        self.assertEqual(self.fileYaml.settingsSet, "Test")
+        self.assertEqual(self.fileYaml.settingsSet, "test")
 
     def test_setSettingsFromLabelSettingsVersion(self):
         self.fileYaml.setSettingsFromLabel('Default1', self.fileYamlMain)
-        self.assertEqual(self.fileYaml.settingsVersion,1)
+        self.assertEqual(self.fileYaml.settingsVersion, 1)
 
     def test_getValueFromMainSettings1(self):
         value = self.fileYamlMain.readValue('salId')
@@ -69,18 +70,18 @@ class TestConfigurationReader(unittest.TestCase):
 
     def test_getValueFromMainSettings2(self):
         value = self.fileYamlMain.readValue('filePath')
-        path = os.path.dirname(__file__)
-        path = os.path.dirname(path)
-        path = path+"/electrometerFitsFiles"
-        self.assertEqual(value, path)
+        self.assertEqual(value, "/home/saluser/ts_electrometer2/electrometerFitsFiles")
 
     def test_setSettingsFromLabelSettingsVersion2(self):
-        #Test from direct definition of which settings to use (e.g. Test;1)
-        self.fileYaml.setSettingsFromLabel('Test;1', self.fileYamlMain)
-        self.assertEqual(self.fileYaml.settingsVersion,1)
+        """Test from direct definition of which settings to use (e.g. Test;1)"""
+        self.fileYaml.setSettingsFromLabel('test;1', self.fileYamlMain)
+        self.assertEqual(self.fileYaml.settingsVersion, 1)
 
     def test_setSettingsFromLabelSettingsVersion3(self):
-        #Test from direct definition of which settings to use (e.g. Test;1)
-        self.fileYaml.setSettingsFromLabel('Test;2', self.fileYamlMain)
-        self.assertEqual(self.fileYaml.settingsVersion,2)
+        """Test from direct definition of which settings to use (e.g. Test;1)"""
+        self.fileYaml.setSettingsFromLabel('test;2', self.fileYamlMain)
+        self.assertEqual(self.fileYaml.settingsVersion, 2)
 
+
+if __name__ == '__main__':
+    atHexTests = unittest.main()
